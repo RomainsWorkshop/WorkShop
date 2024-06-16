@@ -9,7 +9,16 @@
 </head></header>
 <body>
     <h1>how does scrolling damage Gen alpha kids' brains</h1>
-    <script src="/Load.js"></script>
+    <script>var txtFile = new XMLHttpRequest();
+        txtFile.open("GET", "/Intro.txt", true);
+        txtFile.onreadystatechange = function() {
+          if (txtFile.readyState === 4 && txtFile.status == 200) {
+             allText = txtFile.responseText;
+          }
+        }
+        document.getElementById('Jonha').innerHTML = allText;
+        </script>
+        
     <div id="Jonha"><p></p></div>
     <h2>lowering students attention span</h2>
 
