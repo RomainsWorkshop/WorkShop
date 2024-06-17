@@ -21,6 +21,6 @@ img {
     display: block;
 }
 body {
-    padding-left: 20;
-    padding-right: 20;
+    margin-right: 40;
+    margin-left: 40;
 }
