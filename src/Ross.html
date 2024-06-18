@@ -11,34 +11,114 @@
     </style>
 </head></header>
 <body>
-    <script src="BackGround.js" type="module"></script>
-    <h1>how does scrolling damage Gen alpha kids' brains</h1>
-    <h3>___________</h3>
-    <h2>Introduction</h2>
-    <p>	Have you ever wondered what kids mean when they say 'skibidi', 'rizz', or 'gyat'. These are words that they get from TikTok, YouTube Shorts, Instagram Reels, and much more. Scrolling damages Gen Alpha kids' brains by lowering student attention span, Causing behavioral issues, and engraving pop culture references into people's minds.</p>
-    <h3>___________</h3>
-    <img src="short-attention-span.png" width="20%">
-    <h2>lowering students attention span</h2>
-    <p>Scrolling damages Gen Alpha kids' brains by lowering students' attention span. Over the years kid's attention spans Have lowered. many believe that social media is the ".. kids migrate from text-based digital media to image-heavy apps like Instagram and Snapchat.“Students .. find it particularly exhausting to read complex ..text without regular breaks. In the past, students seemed to be accustomed to attending to a text for a longer period of time,” (Mancall-Bite, 8-9).  Students should be able to focus during class otherwise students will never learn anything, especially in ELA. This is evidence that teachers are having problems with students' attention spans. students are not learning fully. Many state tests need students to be able to read, there are direct tests for reading like the reading MCAS or the sat. With reading levels low states would have to lower the reading levels in testing or many won't pass these tests.</p>
-    <h3>___________</h3>
-    <h2>Causing behavioral issues.</h2>
-    <img src="kid-scrolling-videos.png" width="20%">
-    <p>Scrolling damages Gen Alpha kids' brains by Causing behavioral issues. Lots of kids who grow up with iPads and TikTok behave differently from kids who don't. these kids cry more often, have more tampered transoms, and even a bit more violent. teachers are beginning to notice these behaviors based on this article on Clean Internet, "Too many children have no respect for teachers’ authority or their fellow classmates; they’re often violent and abusive; they don’t care about learning, completing assignments or turning in homework (not to mention the fresh hell of using AI to write essays),"(Cumming 3). we let these influences raise their kids instead, "We’ve allowed children unfettered access to social media, and act surprised when they spout hate speech, and/or hate themselves. How can they behave well when poor behavior has been rewarded with screen-time?,"(Cumming 4). This proves how social media has impacted the behavior of other children. Parents are normally too late to notice the effect and this could impact other kids in the house or school. Many schools already show the effect of students fighting in hallways classroom whenever their phone is taken away.</p>
-    <h3>___________</h3>
-    <h2>engraving pop culture references into people's minds</h2>
-    <img src="s-l1200.png" width="20%">
-    <p>scrolling damages Gen Alpha kids' brains by engraving pop culture references into people's minds. when you walk around you hear some kids saying things like "skibidi" or "Gyat", these words come from streamers or memes. A lot of these words are used in clips of streamers or memes on TikTok or Instagram reels. for example "... a person recognises the painting on a book cover because of its use as an internet meme rather than for its original artistic… The painting was Tom Lea's That 2,000 Yard Stare, which portrays the shell-shocked look of a World War Two soldier, and is often used in response to content that is considered brain rot." This shows how this impacts how people see things. an artist could make art but soon the art could be related to a meme and show no credit to the artist. these references take up space in their minds There will be countless moments where they will sit there repeating these words.</p>
-    <h3>___________</h3>
-    <h2>conclusion</h2>
-    <p>where do kids get words like 'skibidi', 'rizz', or 'gyat'. when it comes to TikTok, YouTube Shorts, and Instagram Reels kids can get addicted to these. Addiction to short-form content can impact how the kid's mind grows. parents should put limits on what their child is watching and how much time their child spends on social media. Parents should also stop neglecting their children leaving your child on an iPad is never reasonable and if you don't have time send them to a good daycare.</p>
-    <h3>_________________</h3>
-    <h2>SOurces</h2>
-    <a href="https://lifebonder.com/blog/2024/01/09/gen-alphas-disturbing-behaviour-slammed-in-recent-tiktok-trends/">Cumming, Polly. “Gen Alpha’s Disturbing Behaviour Slammed in Recent TikTok Trends.” Clean Internet, LifeBonder, 9 Jan. 2024.</a>
-    <h3>_________________</h3>
-    <a href="https://www.bbc.com/worklife/article/20190220-how-can-a-distracted-generation-learn-anything">Mancall-Bitel, Nicholas. “How Can a Distracted Generation Learn Anything?” BBC News, BBC, 25 Feb. 2022.</a>
-    <h3>_________________</h3>
-    <a href="https://www.sbs.com.au/news/article/what-is-brain-rot-do-you-have-it/39fexbr4u">Prema, Shivé. “What Is ‘Brain Rot’? Do You Have It?” SBS News, SBS News, 8 Feb. 2024.</a>
+    <script src="https://cdn.skypack.dev/three@0.138.5"></script>
+    <script>
 
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+
+        const renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        // Raymarching shader
+        const raymarchShader = {
+        vertexShader: `
+            void main() {
+            gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+            }
+        `,
+        fragmentShader: `
+            uniform vec3 iResolution;
+            uniform float time;
+
+            float sphere(vec3 ro, vec3 rd, float radius) {
+            vec3 oc = ro;
+            float t = 0.0;
+            float d = length(oc);
+            for (int i = 0; i < 64; i++) {
+                t += d;
+                vec3 p = oc + rd * t;
+                d = length(p - oc) - radius;
+                if (d < 0.001) break;
+            }
+            return t;
+            }
+
+            void main() {
+            vec2 uv = gl_FragCoord.xy / iResolution.xy;
+            vec3 ro = vec3(0.0, 0.0, 5.0); // Camera position
+            vec3 rd = normalize(vec3(uv.x * 2.0 - 1.0, uv.y * 2.0 - 1.0, -1.0));
+
+            float distance = sphere(ro, rd, 1.0); // Sphere with radius 1.0
+            vec3 color = mix(vec3(0.2, 0.7, 0.9), vec3(0.8, 0.2, 0.3), distance); // Color based on distance
+
+            gl_FragColor = vec4(color, 1.0);
+            }
+        `
+        };
+
+        // Create materials and meshes
+        const material = new THREE.ShaderMaterial({
+        uniforms: {
+            iResolution: { value: new THREE.Vector3(window.innerWidth, window.innerHeight, 1.0) },
+            time: { value: 0.0 },
+        },
+        vertexShader: raymarchShader.vertexShader,
+        fragmentShader: raymarchShader.fragmentShader,
+        });
+
+        const plane = new THREE.PlaneGeometry(2, 2);
+        const mesh = new THREE.Mesh(plane, material);
+        scene.add(mesh);
+
+        function animate() {
+        requestAnimationFrame(animate);
+
+        material.uniforms.time.value += 0.01;
+
+        renderer.render(scene, camera);
+        }
+
+        animate();
+
+        window.addEventListener('resize', () => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        material.uniforms.iResolution.value.x = window.innerWidth;
+        material.uniforms.iResolution.value.y = window.innerHeight;
+        });
+
+    </script>
+    <div class="Main">
+        <h1>how does scrolling damage Gen alpha kids' brains</h1>
+        <h3>___________</h3>
+        <h2>Introduction</h2>
+        <p>	Have you ever wondered what kids mean when they say 'skibidi', 'rizz', or 'gyat'. These are words that they get from TikTok, YouTube Shorts, Instagram Reels, and much more. Scrolling damages Gen Alpha kids' brains by lowering student attention span, Causing behavioral issues, and engraving pop culture references into people's minds.</p>
+        <h3>___________</h3>
+        <img src="short-attention-span.png" width="90%">
+        <h2>lowering students attention span</h2>
+        <p>Scrolling damages Gen Alpha kids' brains by lowering students' attention span. Over the years kid's attention spans Have lowered. many believe that social media is the ".. kids migrate from text-based digital media to image-heavy apps like Instagram and Snapchat.“Students .. find it particularly exhausting to read complex ..text without regular breaks. In the past, students seemed to be accustomed to attending to a text for a longer period of time,” (Mancall-Bite, 8-9).  Students should be able to focus during class otherwise students will never learn anything, especially in ELA. This is evidence that teachers are having problems with students' attention spans. students are not learning fully. Many state tests need students to be able to read, there are direct tests for reading like the reading MCAS or the sat. With reading levels low states would have to lower the reading levels in testing or many won't pass these tests.</p>
+        <h3>___________</h3>
+        <h2>Causing behavioral issues.</h2>
+        <img src="kid-scrolling-videos.png" width="90%">
+        <p>Scrolling damages Gen Alpha kids' brains by Causing behavioral issues. Lots of kids who grow up with iPads and TikTok behave differently from kids who don't. these kids cry more often, have more tampered transoms, and even a bit more violent. teachers are beginning to notice these behaviors based on this article on Clean Internet, "Too many children have no respect for teachers’ authority or their fellow classmates; they’re often violent and abusive; they don’t care about learning, completing assignments or turning in homework (not to mention the fresh hell of using AI to write essays),"(Cumming 3). we let these influences raise their kids instead, "We’ve allowed children unfettered access to social media, and act surprised when they spout hate speech, and/or hate themselves. How can they behave well when poor behavior has been rewarded with screen-time?,"(Cumming 4). This proves how social media has impacted the behavior of other children. Parents are normally too late to notice the effect and this could impact other kids in the house or school. Many schools already show the effect of students fighting in hallways classroom whenever their phone is taken away.</p>
+        <h3>___________</h3>
+        <h2>engraving pop culture references into people's minds</h2>
+        <img src="s-l1200.png" width="90%">
+        <p>scrolling damages Gen Alpha kids' brains by engraving pop culture references into people's minds. when you walk around you hear some kids saying things like "skibidi" or "Gyat", these words come from streamers or memes. A lot of these words are used in clips of streamers or memes on TikTok or Instagram reels. for example "... a person recognises the painting on a book cover because of its use as an internet meme rather than for its original artistic… The painting was Tom Lea's That 2,000 Yard Stare, which portrays the shell-shocked look of a World War Two soldier, and is often used in response to content that is considered brain rot." This shows how this impacts how people see things. an artist could make art but soon the art could be related to a meme and show no credit to the artist. these references take up space in their minds There will be countless moments where they will sit there repeating these words.</p>
+        <h3>___________</h3>
+        <h2>conclusion</h2>
+        <p>where do kids get words like 'skibidi', 'rizz', or 'gyat'. when it comes to TikTok, YouTube Shorts, and Instagram Reels kids can get addicted to these. Addiction to short-form content can impact how the kid's mind grows. parents should put limits on what their child is watching and how much time their child spends on social media. Parents should also stop neglecting their children leaving your child on an iPad is never reasonable and if you don't have time send them to a good daycare.</p>
+        <h3>_________________</h3>
+        <h2>Sources</h2>
+        <a href="https://lifebonder.com/blog/2024/01/09/gen-alphas-disturbing-behaviour-slammed-in-recent-tiktok-trends/">Cumming, Polly. “Gen Alpha’s Disturbing Behaviour Slammed in Recent TikTok Trends.” Clean Internet, LifeBonder, 9 Jan. 2024.</a>
+        <h3>_________________</h3>
+        <a href="https://www.bbc.com/worklife/article/20190220-how-can-a-distracted-generation-learn-anything">Mancall-Bitel, Nicholas. “How Can a Distracted Generation Learn Anything?” BBC News, BBC, 25 Feb. 2022.</a>
+        <h3>_________________</h3>
+        <a href="https://www.sbs.com.au/news/article/what-is-brain-rot-do-you-have-it/39fexbr4u">Prema, Shivé. “What Is ‘Brain Rot’? Do You Have It?” SBS News, SBS News, 8 Feb. 2024.</a>
+    </div>
 </body>
 
 </html>

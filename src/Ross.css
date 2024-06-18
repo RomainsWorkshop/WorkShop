@@ -20,7 +20,10 @@ img {
     margin-right: auto;
     display: block;
 }
-body {
-    margin-right: 40;
-    margin-left: 40;
+div.Main {
+    padding-left: 20%;
+    padding-right: 20%;
+}
+a {
+    font-size: large;
 }
